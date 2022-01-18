@@ -1,0 +1,212 @@
+{% load static %}
+{% load video_tag %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+<link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+
+    <!-- Bootstrap-Core-CSS -->
+    <!--/ Style-CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" media="all">
+    <!--// Style-CSS -->
+    <!-- font-awesome-icons -->
+    <link href="{% static 'css/font-awesome.css' %}" rel="stylesheet">
+    <!-- //font-awesome-icons -->
+    <!-- /Fonts -->
+    <link href="//fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700"
+          rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900"
+          rel="stylesheet">
+
+<header class="header bg-dark">
+    <div class="container-fluid px-lg-5">
+        <!-- nav -->
+        <nav class="py-4">
+            <div id="logo">
+                <h1><a href="{% url 'reviews_ali:index' %}" class="editContent"
+                       style="outline: none; outline-offset: -2px; cursor: inherit; color: rgb(255, 255, 255); font-size: 40px; background-color: rgba(0, 0, 0, 0); font-family: Source Sans Pro;, sans-serif;">Techno World</a>
+                </h1>
+            </div>
+
+            <label for="drop" class="toggle">Menu</label>
+            <input type="checkbox" id="drop">
+            <ul class="menu mt-2">
+                <li class="active"><a href="#">Главная</a></li>
+
+                <li>
+                    <a href="{% url 'reviews_ali:video' %}">Видео-обзоры</a>
+                </li>
+                <li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'users:settings' %}">Настройки</a>
+                        </li>
+                        <li><a href="{% url 'users:logout' %}"
+                       style="color: rgb(255, 255, 255); font-weight: 700; text-transform: uppercase;">Выйти</a>
+                        </li>
+                     {% else %}
+                         <li><a href="{% url 'users:login' %}"
+                       style="color: rgb(255, 255, 255); font-weight: 700; text-transform: uppercase;">Вход</a>
+                        </li>
+                    <li><a href="{% url 'users:register' %}"
+                       style="color: rgb(255, 255, 255); font-weight: 700; text-transform: uppercase;">Регистрация</a>
+                        </li>
+                    {% endif %}
+                </li>
+            </ul>
+        </nav>
+        <!-- //nav -->
+    </div>
+</header>
+
+<style>
+/* Demo Background */
+
+/* Form Style */
+.form-horizontal{
+ margin-top: 40%;
+ margin-left: -10%;
+ background: #fff;
+ padding-bottom: 40px;
+ border-radius: 15px;
+ text-align: center;
+}
+.form-horizontal .heading{
+ display: block;
+ font-size: 35px;
+ font-weight: 700;
+ padding: 35px 0;
+ border-bottom: 1px solid #f0f0f0;
+ margin-bottom: 30px;
+}
+.form-horizontal .form-group{
+ padding: 0 40px;
+ margin: 0 0 25px 0;
+ position: relative;
+}
+.form-horizontal .form-control{
+ background: #f0f0f0;
+ border: none;
+ border-radius: 20px;
+ box-shadow: none;
+ padding: 0 20px 0 45px;
+ height: 40px;
+ transition: all 0.3s ease 0s;
+}
+.form-horizontal .form-control:focus{
+ background: #e0e0e0;
+ box-shadow: none;
+ outline: 0 none;
+}
+.form-horizontal .form-group i{
+ position: absolute;
+ top: 12px;
+ left: 60px;
+ font-size: 17px;
+ color: #c8c8c8;
+ transition : all 0.5s ease 0s;
+}
+.form-horizontal .form-control:focus + i{
+ color: #00b4ef;
+}
+.form-horizontal .fa-question-circle{
+ display: inline-block;
+ position: absolute;
+ top: 12px;
+ right: 60px;
+ font-size: 20px;
+ color: #808080;
+ transition: all 0.5s ease 0s;
+}
+.form-horizontal .fa-question-circle:hover{
+ color: #000;
+}
+.form-horizontal .main-checkbox{
+ float: left;
+ width: 20px;
+ height: 20px;
+ background: #11a3fc;
+ border-radius: 50%;
+ position: relative;
+ margin: 5px 0 0 5px;
+ border: 1px solid #11a3fc;
+}
+.form-horizontal .main-checkbox label{
+ width: 20px;
+ height: 20px;
+ position: absolute;
+ top: 0;
+ left: 0;
+ cursor: pointer;
+}
+.form-horizontal .main-checkbox label:after{
+ content: "";
+ width: 10px;
+ height: 5px;
+ position: absolute;
+ top: 5px;
+ left: 4px;
+ border: 3px solid #fff;
+ border-top: none;
+ border-right: none;
+ background: transparent;
+ opacity: 0;
+ -webkit-transform: rotate(-45deg);
+ transform: rotate(-45deg);
+}
+.form-horizontal .main-checkbox input[type=checkbox]{
+ visibility: hidden;
+}
+.form-horizontal .main-checkbox input[type=checkbox]:checked + label:after{
+ opacity: 1;
+}
+.form-horizontal .text{
+ float: left;
+ margin-left: 7px;
+ line-height: 20px;
+ padding-top: 5px;
+ text-transform: capitalize;
+}
+.form-horizontal .btn{
+ float: right;
+ font-size: 14px;
+ color: #fff;
+ background: #00b4ef;
+ border-radius: 30px;
+ padding: 10px 25px;
+ border: none;
+ text-transform: capitalize;
+ transition: all 0.5s ease 0s;
+}
+@media only screen and (max-width: 479px){
+ .form-horizontal .form-group{
+ padding: 0 25px;
+ }
+ .form-horizontal .form-group i{
+ left: 45px;
+ }
+ .form-horizontal .btn{
+ padding: 10px 20px;
+ }
+}
+
+</style>
+
+
+<div class="container">
+ <div class="row">
+
+
+ <div class="col-md-offset-3 col-md-7 mb-5">
+ <form class="form-horizontal" method="post">
+	 	{% csrf_token %}
+		 <span class="heading">НАСТРОЙКИ</span>
+            {{ form.as_p }}
+		 <div class="form-group">
+		 <button type="submit" class="btn btn-default">СОХРАНИТЬ</button>
+		 </div>
+ </form>
+ </div>
+
+ </div><!-- /.row -->
+</div><!-- /.container -->
+
+{% include 'include/footer.html' %}

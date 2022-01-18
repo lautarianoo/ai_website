@@ -1,0 +1,66 @@
+{% extends 'reviews_ali/base.html' %}
+{% load embed_video_tags %}
+{% load static %}
+{% block title %} {{ reviews.title }} {% endblock title %}
+{% block container %}
+    <div class="container py-md-3">
+{% endblock container %}
+
+{% block sidebar %}
+    <div class="side-bar col-lg-4">
+{% endblock sidebar %}
+
+{% block movie %}
+    <div class="left-ads-display col-lg-8">
+        <div class="row">
+            <div class=" col-md-6">
+                <img class="img-fluid" src="{{ aliexpress.poster.url }}" alt="" >
+            </div>
+            <div class="desc1-right col-md-6 pl-lg-4">
+                <ul>
+                    <li style="list-style: none">
+                        <span><b>Цена:</b> ${{ aliexpress.price }}</span></li>
+                    <li style="list-style: none">
+                        <span><b>Категории:</b> {{ aliexpress.category }}</span></li>
+                    <li style="list-style: none">
+                        <span><b>Ccылка на Aliexpress:</b> <a href="{{ aliexpress.aliurl }}">
+                            link
+                        </a></span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row sub-para-w3layouts mt-5">
+
+            <h3 class="shop-sing editContent">
+                {{ aliexpress.less_description }}
+            </h3>
+            <img class="img-fluid" src="{{ aliexpress.photo.url }}" alt="" style="max-width: 380px; margin-bottom: 40px">
+            {{ aliexpress.video|safe }}
+
+        </div>
+        <div class="row sub-para-w3layouts mt-5">
+
+            <h3 class="shop-sing editContent">
+                {{ aliexpress.title }}
+            </h3>
+            <p class="editContent">
+                {{ aliexpress.description|safe }}
+            </p>
+        </div>
+        <hr>
+        <div class="row">
+
+                <!--  //contact form grid ends here -->
+            </div>
+        </div>
+
+
+    </div>
+    <script>
+        function addReview(name, id) {
+            document.getElementById("contactparent").value = id;
+            document.getElementById("contactcomment").innerText = `${name}, `
+        }
+
+    </script>
+{% endblock movie %}

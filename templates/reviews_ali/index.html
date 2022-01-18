@@ -1,0 +1,34 @@
+{% extends 'reviews_ali/base.html' %}
+{% block title %} {% endblock title %}
+{% block header %} bg1 {% endblock header %}
+{% block movie %}
+<div class="left-ads-display col-lg-9">
+    <div class="row">
+        {% for news in news_list %}
+        <div class="col-md-4 product-men">
+            <div class="product-shoe-info editContent text-center mt-lg-4">
+                <div class="men-thumb-item">
+                    <img src="{{ news.image.url }}" class="img-fluid" alt="">
+                </div>
+                <div class="item-info-product">
+                    <h4 class="">
+                        <a href="{% url 'reviews_ali:news_detail' news.url %}"
+                           class="editContent">
+                            {{ news.title }}
+                        </a>
+                    </h4>
+
+                    <div class="product_price">
+                        <div class="grid-price">
+                            <span class="money editContent">{{ news.less_description }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="grid-img-right mt-4 text-right bg bg1">
+    </div>
+</div>
+{% endblock movie %}

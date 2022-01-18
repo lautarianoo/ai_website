@@ -1,0 +1,54 @@
+{% load video_tag %}
+<header class="header">
+    <div class="container-fluid px-lg-5">
+        <!-- nav -->
+        <nav class="py-4">
+            <div id="logo">
+
+                </h1>
+            </div>
+
+            <label for="drop" class="toggle">Menu</label>
+            <input type="checkbox" id="drop">
+            <ul class="menu mt-2">
+                <li class="active"><a href="#">Главная</a></li>
+                <li>
+
+                </li>
+                <li>
+                    <a href="{% url 'reviews_ali:video' %}">Демонстрация</a>
+                </li>
+                <li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'users:settings' %}">Настройки</a>
+                        </li>
+                        <li><a href="{% url 'users:logout' %}"
+                       style="color: rgb(255, 255, 255); font-weight: 700; text-transform: uppercase;">Выйти</a>
+                        </li>
+                    {% else %}
+                         <li><a href="{% url 'users:login' %}"
+                       style="color: rgb(255, 255, 255); font-weight: 700; text-transform: uppercase;">Вход</a>
+                        </li>
+                    <li><a href="{% url 'users:register' %}"
+                       style="color: rgb(255, 255, 255); font-weight: 700; text-transform: uppercase;">Регистрация</a>
+                        </li>
+                    {% endif %}
+                </li>
+            </ul>
+        </nav>
+        <!-- //nav -->
+    </div>
+</header>
+<!-- //header -->
+<!--/banner-->
+<div class="banner-info">
+    <h3 class="mb-4 editContent">AI World</h3>
+
+    <p class="editContent">Последние Новости ИИ</p>
+    <div class="ban-buttons">
+
+
+    </div>
+</div>
+<!--// banner-inner -->
+<!--// banner-inner -->
