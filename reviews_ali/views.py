@@ -37,7 +37,7 @@ class SearchFilm(Categor,ListView):
 class VideoView(Categor, ListView):
     model = Reviews
     queryset = Reviews.objects.all()
-    template_name = 'reviews_ali/video.html'
+    template_name = 'reviews_ali/artificial_dme.html'
 
 
 class VideoDetaillView(Categor, DetailView):
@@ -47,7 +47,7 @@ class VideoDetaillView(Categor, DetailView):
 
 
 class SearchVideo(Categor, ListView):
-    template_name = 'reviews_ali/video.html'
+    template_name = 'reviews_ali/artificial_dme.html'
 
     def get_queryset(self):
         return Reviews.objects.filter(title__icontains=self.request.GET.get('search_video'))
@@ -56,12 +56,6 @@ class SearchVideo(Categor, ListView):
         context = super().get_context_data(*args, **kwargs)
         context['search_video'] = f'searchvideo={self.request.GET.get("search_video")}&'
         return context
-
-
-
-
-
-
 
 class FilterCategory(Categor, ListView):
     template_name = 'reviews_ali/filtercategory.html'
@@ -80,6 +74,5 @@ class FilterCategory(Categor, ListView):
             category_news__in=self.request.GET.get('category')
         )
         return context
-
 
 

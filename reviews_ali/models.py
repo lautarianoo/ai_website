@@ -30,8 +30,6 @@ class Reviews(models.Model):
     category = models.ManyToManyField(Category, verbose_name='Категории видео', related_name='review_category')
     url = models.SlugField(max_length=130, unique=True)
 
-
-
     def get_absolute_url(self):
         return reverse("reviews_ali:video_detail", kwargs={"slug": self.url})
 
@@ -55,7 +53,6 @@ class News(models.Model):
     category_news = models.ForeignKey(Category, verbose_name='Категории новости', related_name='news_category', on_delete=models.CASCADE)
     url = models.SlugField(max_length=130, unique=True)
 
-
     def get_absolute_url(self):
         return reverse("reviews_ali:news_detail", kwargs={"slug": self.url})
 
@@ -66,6 +63,7 @@ class News(models.Model):
         verbose_name = 'Новость'
         verbose_name_plural = 'Новости'
 
-
+class PhotoAI(models.Model):
+    pass
 
 
