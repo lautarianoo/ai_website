@@ -14,6 +14,14 @@ class Category(models.Model):
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
+class ImageAI(models.Model):
+
+    photo = models.ImageField(verbose_name='image')
+    slug = models.SlugField(unique=True, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.slug}"
+
 class Reviews(models.Model):
     # Видео/Обзоры/Обучалки
     title = models.CharField('Название обзора', max_length=150)
@@ -62,8 +70,5 @@ class News(models.Model):
     class Meta:
         verbose_name = 'Новость'
         verbose_name_plural = 'Новости'
-
-class PhotoAI(models.Model):
-    pass
 
 

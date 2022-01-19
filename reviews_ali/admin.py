@@ -2,12 +2,12 @@ from django import forms
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from .models import Category, Reviews, News
+from .models import Category, Reviews, News, ImageAI
 
 
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
-
+admin.site.register(ImageAI)
 class ReviewsAdminForm(forms.ModelForm):
     description = forms.CharField(label="Описание", widget=CKEditorUploadingWidget())
     video = forms.CharField(label="Видео", widget=CKEditorUploadingWidget())
