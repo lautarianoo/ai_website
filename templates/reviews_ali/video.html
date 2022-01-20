@@ -1,35 +1,9 @@
+{% extends 'reviews_ali/base.html' %}
+{% load static %}
 
-<html>
-<head></head>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
-    <script lang="js">
-        async function doTraining(model){
-            const history =
-                  await model.fit(x, y,
-                        { epochs: 400,
-                          callbacks:{
-                              onEpochEnd: async(epoch, logs) =>{
-                                  console.log("Эпоха:"
-                                              + epoch
-                                              + " Потери:"
-                                              + logs.loss);
-
-                              }
-                          }
-                        });
-        }
-        const model = tf.sequential();
-        model.add(tf.layers.dense({units: 1, inputShape: [1]}));
-        model.compile({loss:'meanSquaredError',
-                       optimizer:'sgd'});
-        model.summary();
-        const x = tf.tensor2d([-2.0, -1.0, 0.0, 1.0, 2.0, 3.0, 4.0], [7, 1]);
-        const y = tf.tensor2d([-13.0, -8.0, -3.0, 2.0, 7.0, 12.0, 17.0], [7, 1]);
-        doTraining(model).then(() => {
-            alert(model.predict(tf.tensor2d([11], [1,1])));
-        });
-    </script>
-<body>
-    <h1>Искусственный интеллект живёт здесь</h1>
-</body>
-</html>
+{% block movie %}
+    <form action="{% url 'reviews_ali:ai_view' %}" method="get">
+        <input class="form-control" type="file" name="image">
+        <button type="submit" >ОБУЧИТЬ НЕЙРОСЕТЬ</button>
+    </form>
+{% endblock movie %}

@@ -4,8 +4,9 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView, DetailView
-from .models import News, Reviews, Category
-
+from .models import News, Reviews, Category, ImageAI
+from .ai import neuroview
+import random
 
 class Categor:
     """Жанры и года выхода фильмов"""
@@ -37,7 +38,7 @@ class SearchFilm(Categor,ListView):
 class VideoView(Categor, ListView):
     model = Reviews
     queryset = Reviews.objects.all()
-    template_name = 'reviews_ali/artificial_dme.html'
+    template_name = 'reviews_ali/video.html'
 
 
 class VideoDetaillView(Categor, DetailView):
@@ -75,4 +76,10 @@ class FilterCategory(Categor, ListView):
         )
         return context
 
+class AIView(View):
 
+    def get(self, request, *args, **kwargs):
+        image = request.GET.get('image')
+        nerve = neuroview()
+        print(nerve)
+        return render(request, 'reviews_ali/artificial_dme.html', {'nerve': nerve})

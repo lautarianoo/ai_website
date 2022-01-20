@@ -2,6 +2,8 @@ import tensorflow as tf
 from tensorflow import keras
 import numpy as np
 import matplotlib.pyplot as plt
+from .models import ImageAI
+import random
 
 fashion_mnist = keras.datasets.fashion_mnist
 (train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
@@ -25,9 +27,9 @@ def plot_image(i, predictions_array, true_label, img):
     color = 'red'
 
   plt.xlabel("{} {:2.0f}% ({})".format(class_names[predicted_label],
-                                100*np.max(predictions_array),
-                                class_names[true_label]),
-                                color=color)
+      100 * np.max(predictions_array),
+      class_names[true_label]),
+      color=color)
 
 def plot_value_array(i, predictions_array, true_label):
   predictions_array, true_label = predictions_array[i], true_label[i]
@@ -65,14 +67,20 @@ def neuroview(query_img):
         'test_accuracy': int(test_acc * 100)
     }
 
+
     img = query_img
     img = (np.expand_dims (img, 0))
     predictions = model.predict(img)
     data['predictions'] = predictions
     data['predict_value'] = category.get(np.argmax(predictions))
-    print(data['predict_value'])
     plot_image(0, predictions, test_labels, img)
-    _ = plt.xticks(range(10), class_names, rotation=45)
-    plt.show()
+    _ = plt.xticks(rotation=45)
 
-neuroview(ml.ImageAI.objects.get(slug='sheet').photo)
+    print(data)
+    new_model_image = ImageAI.objects.create(photo=plt.savefig('ai_image.png'))
+    new_model_image.slug = f'{new_model_image.id}_{random.randint(1, 99999999)}'
+    new_model_image.save()
+    #query_img.photo = plt.savefig('ai_image.png')
+    #query_img.save()
+    data['model'] = new_model_image
+    return data
