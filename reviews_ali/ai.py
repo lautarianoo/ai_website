@@ -1,15 +1,22 @@
+import sys
+from io import BytesIO
+
 import tensorflow as tf
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from tensorflow import keras
 import numpy as np
 import matplotlib.pyplot as plt
 from .models import ImageAI
 import random
+from PIL import Image
+from keras.preprocessing import image
 
 fashion_mnist = keras.datasets.fashion_mnist
 (train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
 class_names = ['T-shirt', 'Trouser', 'Pullover', 'Dress', 'Coat',
                'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
 category = {0: 'T-shirt', 1: 'Trouser', 2:'Pullover', 3:'Dress', 4:'Coat', 5:'Sandal', 6:'Shirt', 7:'Sneaker', 8:'Bag', 9:'Ankle boot'}
+
 
 '''Отображение'''
 def plot_image(i, predictions_array, true_label, img):
@@ -44,7 +51,7 @@ def plot_value_array(i, predictions_array, true_label):
   thisplot[true_label].set_color('blue')
 
 
-def neuroview(query_img):
+def neuroview(query_img, image_name):
 
     '''Создание модели и слоёв'''
     model = keras.Sequential([
@@ -67,20 +74,20 @@ def neuroview(query_img):
         'test_accuracy': int(test_acc * 100)
     }
 
+    image_path = 'C:\\Users\\cerf\\Desktop\\Python\\Работы и проекты\\ai_website\\media\\' + str(image_name)
+    image = tf.keras.preprocessing.image.load_img(image_path)
+    input_arr = tf.keras.preprocessing.image.img_to_array(image)
+    input_arr = np.array([input_arr])
 
-    img = query_img
-    img = (np.expand_dims (img, 0))
-    predictions = model.predict(img)
+    predictions = model.predict(input_arr)
     data['predictions'] = predictions
     data['predict_value'] = category.get(np.argmax(predictions))
-    plot_image(0, predictions, test_labels, img)
+    plot_image(0, predictions, test_labels, input_arr)
     _ = plt.xticks(rotation=45)
 
     print(data)
     new_model_image = ImageAI.objects.create(photo=plt.savefig('ai_image.png'))
     new_model_image.slug = f'{new_model_image.id}_{random.randint(1, 99999999)}'
     new_model_image.save()
-    #query_img.photo = plt.savefig('ai_image.png')
-    #query_img.save()
     data['model'] = new_model_image
     return data

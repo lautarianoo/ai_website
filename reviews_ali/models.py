@@ -1,3 +1,8 @@
+import sys
+from io import BytesIO
+
+from PIL import Image
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.urls import reverse
 
@@ -21,6 +26,23 @@ class ImageAI(models.Model):
 
     def __str__(self):
         return f"{self.slug}"
+
+    def save(self, *args, **kwargs):
+        #
+        if self.photo:
+            photo = self.photo
+            img = Image.open(photo)
+            new_img = img.convert('RGB')
+            resized_new_img = new_img.resize((28, 28), Image.ANTIALIAS)
+            filestream = BytesIO()
+            resized_new_img.save(filestream, 'JPEG', quality=90)
+            filestream.seek(0)
+            name = '{}.{}'.format(*self.photo.name.split('.'))
+            self.photo = InMemoryUploadedFile(
+                filestream, 'ImageField', name, 'jpeg/image', sys.getsizeof(filestream), None
+            )
+        super().save(*args, **kwargs)
+
 
 class Reviews(models.Model):
     # Видео/Обзоры/Обучалки

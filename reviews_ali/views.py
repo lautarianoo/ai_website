@@ -35,10 +35,6 @@ class SearchFilm(Categor,ListView):
         context['search_news'] = f'searchnews={self.request.GET.get("search_news")}&'
         return context
 
-class VideoView(Categor, ListView):
-    model = Reviews
-    queryset = Reviews.objects.all()
-    template_name = 'reviews_ali/video.html'
 
 
 class VideoDetaillView(Categor, DetailView):
@@ -79,7 +75,13 @@ class FilterCategory(Categor, ListView):
 class AIView(View):
 
     def get(self, request, *args, **kwargs):
-        image = request.GET.get('image')
-        nerve = neuroview()
-        print(nerve)
+        return render(request, 'reviews_ali/video.html', {})
+
+    def post(self, request, *args, **kwargs):
+        image = request.FILES.get('image')
+        print(image)
+        new_model_image = ImageAI.objects.create(photo=image)
+        new_model_image.slug = f'{new_model_image.id}_{random.randint(1, 99999999)}'
+        new_model_image.save()
+        nerve = neuroview(new_model_image, image)
         return render(request, 'reviews_ali/artificial_dme.html', {'nerve': nerve})
