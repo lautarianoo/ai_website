@@ -33,7 +33,7 @@ class ImageAI(models.Model):
             photo = self.photo
             img = Image.open(photo)
             new_img = img.convert('RGB')
-            resized_new_img = new_img.resize((28, 28), Image.ANTIALIAS)
+            resized_new_img = new_img.resize((640, 480), Image.ANTIALIAS)
             filestream = BytesIO()
             resized_new_img.save(filestream, 'JPEG', quality=90)
             filestream.seek(0)

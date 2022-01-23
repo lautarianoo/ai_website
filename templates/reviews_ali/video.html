@@ -2,8 +2,8 @@
 {% load static %}
 
 {% block movie %}
-    <form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
-        <input class="form-control" type="file" name="image">
-        <button type="submit" >ОБУЧИТЬ НЕЙРОСЕТЬ</button>
+    <form action="{% url 'reviews_ali:ai_view' %}" method="get">
+        <input class="form-control" type="number" name="index">
+        <button class="btn btn-primary mt-2" type="submit" >ОБУЧИТЬ НЕЙРОСЕТЬ</button>
     </form>
 {% endblock movie %}

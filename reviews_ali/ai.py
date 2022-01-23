@@ -1,15 +1,12 @@
-import sys
-from io import BytesIO
 
+import os
 import tensorflow as tf
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from tensorflow import keras
 import numpy as np
 import matplotlib.pyplot as plt
 from .models import ImageAI
 import random
-from PIL import Image
-from keras.preprocessing import image
+
 
 fashion_mnist = keras.datasets.fashion_mnist
 (train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
@@ -37,6 +34,7 @@ def plot_image(i, predictions_array, true_label, img):
       100 * np.max(predictions_array),
       class_names[true_label]),
       color=color)
+  plt.savefig('media/saved_figure.png', dpi=100)
 
 def plot_value_array(i, predictions_array, true_label):
   predictions_array, true_label = predictions_array[i], true_label[i]
@@ -51,7 +49,7 @@ def plot_value_array(i, predictions_array, true_label):
   thisplot[true_label].set_color('blue')
 
 
-def neuroview(query_img, image_name):
+def neuroview(index):
 
     '''Создание модели и слоёв'''
     model = keras.Sequential([
@@ -74,19 +72,22 @@ def neuroview(query_img, image_name):
         'test_accuracy': int(test_acc * 100)
     }
 
-    image_path = 'C:\\Users\\cerf\\Desktop\\Python\\Работы и проекты\\ai_website\\media\\' + str(image_name)
-    image = tf.keras.preprocessing.image.load_img(image_path)
-    input_arr = tf.keras.preprocessing.image.img_to_array(image)
-    input_arr = np.array([input_arr])
+    #image_path = 'C:\\Users\\cerf\\Desktop\\Python\\Работы и проекты\\ai_website\\media\\' + str(image_name)
+    #image = tf.keras.preprocessing.image.load_img(image_path)
+    #input_arr = tf.keras.preprocessing.image.img_to_array(image)
+    #input_arr = np.array([input_arr])
 
-    predictions = model.predict(input_arr)
+    #input_arr = np.expand_dims(input_arr, axis=-1)
+    img = test_images[int(index)]
+    img = (np.expand_dims (img, 0))
+    predictions = model.predict(img)
     data['predictions'] = predictions
     data['predict_value'] = category.get(np.argmax(predictions))
-    plot_image(0, predictions, test_labels, input_arr)
+    plot_image(0, predictions, test_labels, img)
     _ = plt.xticks(rotation=45)
 
-    print(data)
-    new_model_image = ImageAI.objects.create(photo=plt.savefig('ai_image.png'))
+    image_path = "saved_figure.png"
+    new_model_image = ImageAI.objects.create(photo=image_path)
     new_model_image.slug = f'{new_model_image.id}_{random.randint(1, 99999999)}'
     new_model_image.save()
     data['model'] = new_model_image

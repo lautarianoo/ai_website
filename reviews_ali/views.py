@@ -72,16 +72,22 @@ class FilterCategory(Categor, ListView):
         )
         return context
 
-class AIView(View):
+class DemonstationView(View):
 
     def get(self, request, *args, **kwargs):
         return render(request, 'reviews_ali/video.html', {})
 
-    def post(self, request, *args, **kwargs):
-        image = request.FILES.get('image')
-        print(image)
-        new_model_image = ImageAI.objects.create(photo=image)
-        new_model_image.slug = f'{new_model_image.id}_{random.randint(1, 99999999)}'
-        new_model_image.save()
-        nerve = neuroview(new_model_image, image)
-        return render(request, 'reviews_ali/artificial_dme.html', {'nerve': nerve})
+class AIView(View):
+
+    def get(self, request, *args, **kwargs):
+        index = request.GET.get('index')
+        neuro_data = neuroview(index)
+        return render(request, 'reviews_ali/artificial_dme.html', {'data': neuro_data})
+
+    #def post(self, request, *args, **kwargs):
+    #    #image = request.FILES.get('image')
+    #    #new_model_image = ImageAI.objects.create(photo=image)
+    #    #new_model_image.slug = f'{new_model_image.id}_{random.randint(1, 99999999)}'
+    #    #new_model_image.save()
+    #    nerve = neuroview(new_model_image)
+    #    return render(request, 'reviews_ali/artificial_dme.html', {'nerve': nerve})
