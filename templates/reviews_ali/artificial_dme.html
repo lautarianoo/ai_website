@@ -2,4 +2,14 @@
 {% load static %}
 
 {% block movie %}
+    <div class="row">
+       <div class="col-5">
+           <img src="{{ model.photo.url }}" class="img-fluid" alt="mi">
+       </div>
+       <div class="col-7">
+           <h2>{{ data.predict_value }}</h2>
+           <h4>{{ data.percent }}%</h4>
+           <p>Точность модели: {{ data.test_accuracy }}%</p>
+       </div>
+    </div>
 {% endblock movie %}

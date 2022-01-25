@@ -1,4 +1,3 @@
-
 import os
 import tensorflow as tf
 from tensorflow import keras
@@ -10,10 +9,10 @@ import random
 
 fashion_mnist = keras.datasets.fashion_mnist
 (train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
-class_names = ['T-shirt', 'Trouser', 'Pullover', 'Dress', 'Coat',
-               'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot']
+class_names =  ['Футболка', 'Штаны', 'Свитер', 'Платье', 'Пальто',
+               'Сандали', 'Рубашка', 'Кроссовки', 'Сумка', 'Ботильоны']
 category = {0: 'T-shirt', 1: 'Trouser', 2:'Pullover', 3:'Dress', 4:'Coat', 5:'Sandal', 6:'Shirt', 7:'Sneaker', 8:'Bag', 9:'Ankle boot'}
-
+category_russian = {0: 'Футболка', 1: 'Штаны', 2:'Свитер', 3:'Платье', 4:'Пальто', 5:'Сандали', 6:'Рубашка', 7:'Кроссовки', 8:'Сумка', 9:'Ботильоны'}
 
 '''Отображение'''
 def plot_image(i, predictions_array, true_label, img):
@@ -30,9 +29,8 @@ def plot_image(i, predictions_array, true_label, img):
   else:
     color = 'red'
 
-  plt.xlabel("{} {:2.0f}% ({})".format(class_names[predicted_label],
-      100 * np.max(predictions_array),
-      class_names[true_label]),
+  plt.xlabel("{} {:2.0f}%".format(class_names[predicted_label],
+      100 * np.max(predictions_array)),
       color=color)
   plt.savefig('media/saved_figure.png', dpi=100)
 
@@ -72,20 +70,14 @@ def neuroview(index):
         'test_accuracy': int(test_acc * 100)
     }
 
-    #image_path = 'C:\\Users\\cerf\\Desktop\\Python\\Работы и проекты\\ai_website\\media\\' + str(image_name)
-    #image = tf.keras.preprocessing.image.load_img(image_path)
-    #input_arr = tf.keras.preprocessing.image.img_to_array(image)
-    #input_arr = np.array([input_arr])
-
-    #input_arr = np.expand_dims(input_arr, axis=-1)
     img = test_images[int(index)]
     img = (np.expand_dims (img, 0))
     predictions = model.predict(img)
     data['predictions'] = predictions
-    data['predict_value'] = category.get(np.argmax(predictions))
+    data['predict_value'] = category_russian.get(np.argmax(predictions))
     plot_image(0, predictions, test_labels, img)
     _ = plt.xticks(rotation=45)
-
+    data['percent'] = 100*np.max(predictions)
     image_path = "saved_figure.png"
     new_model_image = ImageAI.objects.create(photo=image_path)
     new_model_image.slug = f'{new_model_image.id}_{random.randint(1, 99999999)}'
