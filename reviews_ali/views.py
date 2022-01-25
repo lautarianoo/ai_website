@@ -75,10 +75,6 @@ class FilterCategory(Categor, ListView):
 class DemonstationView(View):
 
     def get(self, request, *args, **kwargs):
-        image_models = ImageAI.objects.all()
-        if image_models:
-            for image in image_models:
-                image.delete()
         return render(request, 'reviews_ali/video.html', {})
 
 class AIView(View):
