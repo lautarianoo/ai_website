@@ -64,7 +64,7 @@ def neuroview(index):
     )
 
     '''Обучение модели'''
-    model.fit(train_images, train_labels, epochs=3)
+    model.fit(train_images, train_labels, epochs=2)
     test_loss, test_acc = model.evaluate(test_images, test_labels)  # Оценка точности
     data = {
         'test_accuracy': int(test_acc * 100)
