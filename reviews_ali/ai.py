@@ -47,7 +47,7 @@ def plot_value_array(i, predictions_array, true_label):
   thisplot[true_label].set_color('blue')
 
 
-def neuroview(index):
+def neuroview(model_image):
 
     '''Создание модели и слоёв'''
     model = keras.Sequential([
@@ -56,6 +56,7 @@ def neuroview(index):
         keras.layers.Dense(10, activation=tf.nn.softmax)
     ])
 
+    print(os.path.abspath(os.path.dirname(__file__)))
     '''Компилирование'''
     model.compile(
         optimizer=tf.optimizers.Adam(),  # Оптимизатор
@@ -64,20 +65,24 @@ def neuroview(index):
     )
 
     '''Обучение модели'''
-    model.fit(train_images, train_labels, epochs=2)
+    model.fit(train_images, train_labels, epochs=4)
     test_loss, test_acc = model.evaluate(test_images, test_labels)  # Оценка точности
     data = {
         'test_accuracy': int(test_acc * 100)
     }
 
-    img = test_images[int(index)]
-    img = (np.expand_dims (img, 0))
-    predictions = model.predict(img)
+    image_path = 'C:/Users/cerf/Desktop/Python/Готовые проекты и работы/ai_website/' + str(model_image.photo.url)
+    image = tf.keras.preprocessing.image.load_img(image_path)
+    input_arr = tf.keras.preprocessing.image.img_to_array(image)
+    input_arr = np.array([input_arr])
+
+    predictions = model.predict(input_arr)
     data['predictions'] = predictions
     data['predict_value'] = category_russian.get(np.argmax(predictions))
-    plot_image(0, predictions, test_labels, img)
+    plot_image(0, predictions, test_labels, input_arr)
     _ = plt.xticks(rotation=45)
     data['percent'] = 100*np.max(predictions)
+
     image_path = "saved_figure.png"
     new_model_image = ImageAI.objects.create(photo=image_path)
     new_model_image.slug = f'{new_model_image.id}_{random.randint(1, 99999999)}'

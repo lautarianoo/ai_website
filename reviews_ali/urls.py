@@ -9,5 +9,5 @@ urlpatterns = [
     path('search/', SearchVideo.as_view(), name='search_video'),
     path('filtercategory/', FilterCategory.as_view(), name='filter_category'),
     path('demonstration', DemonstationView.as_view(), name='demonstration'),
-    path('applyai', AIView.as_view(), name='ai_view'),
+    path('applyai/<int:image_id>', AIView.as_view(), name='ai_view'),
 ]
