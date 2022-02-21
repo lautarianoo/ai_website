@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from .models import ImageAI
 import random
-
+import cv2
 
 fashion_mnist = keras.datasets.fashion_mnist
 (train_images, train_labels), (test_images, test_labels) = fashion_mnist.load_data()
@@ -34,18 +34,43 @@ def plot_image(i, predictions_array, true_label, img):
       color=color)
   plt.savefig('media/saved_figure.png', dpi=100)
 
-def plot_value_array(i, predictions_array, true_label):
-  predictions_array, true_label = predictions_array[i], true_label[i]
-  plt.grid(False)
-  plt.xticks([])
-  plt.yticks([])
-  thisplot = plt.bar(range(10), predictions_array, color="#777777")
-  plt.ylim([0, 1])
-  predicted_label = np.argmax(predictions_array)
 
-  thisplot[predicted_label].set_color('red')
-  thisplot[true_label].set_color('blue')
 
+from PIL import Image, ImageFilter
+
+
+def imageprepare(argv):
+    im = Image.open(argv).convert('L')
+    width = float(im.size[0])
+    height = float(im.size[1])
+    newImage = Image.new('L', (28, 28), (255))  # creates white canvas of 28x28 pixels
+
+    if width > height:  # check which dimension is bigger
+        # Width is bigger. Width becomes 20 pixels.
+        nheight = int(round((20.0 / width * height), 0))  # resize height according to ratio width
+        if (nheight == 0):  # rare case but minimum is 1 pixel
+            nheight = 1
+            # resize and sharpen
+        img = im.resize((20, nheight), Image.ANTIALIAS).filter(ImageFilter.SHARPEN)
+        wtop = int(round(((28 - nheight) / 2), 0))  # calculate horizontal position
+        newImage.paste(img, (4, wtop))  # paste resized image on white canvas
+    else:
+        # Height is bigger. Heigth becomes 20 pixels.
+        nwidth = int(round((20.0 / height * width), 0))  # resize width according to ratio height
+        if (nwidth == 0):  # rare case but minimum is 1 pixel
+            nwidth = 1
+            # resize and sharpen
+        img = im.resize((nwidth, 20), Image.ANTIALIAS).filter(ImageFilter.SHARPEN)
+        wleft = int(round(((28 - nwidth) / 2), 0))  # caculate vertical pozition
+        newImage.paste(img, (wleft, 4))  # paste resized image on white canvas
+
+    # newImage.save("sample.png
+
+    tv = list(newImage.getdata())  # get pixel values
+
+    # normalize pixels to 0 and 1. 0 is pure white, 1 is pure black.
+    tva = [(255 - x) * 1.0 / 255.0 for x in tv]
+    return tva
 
 def neuroview(model_image):
 
@@ -71,12 +96,17 @@ def neuroview(model_image):
         'test_accuracy': int(test_acc * 100)
     }
 
-    image_path = 'C:/Users/cerf/Desktop/Python/Готовые проекты и работы/ai_website/' + str(model_image.photo.url)
+    image_path = 'C:/Users/cerf/Desktop/Python/Готовые проекты и работы/ai_website' + str(model_image.photo.url)
     image = tf.keras.preprocessing.image.load_img(image_path)
     input_arr = tf.keras.preprocessing.image.img_to_array(image)
     input_arr = np.array([input_arr])
 
-    predictions = model.predict(input_arr)
+    test_img_array = input_arr / 255.0  # normalize
+    test_img_array = tf.image.rgb_to_grayscale(test_img_array)  # will return shape (28, 28, 1)
+    test_img_array = tf.squeeze(test_img_array, axis=-1)  # shape is (28, 28)
+    test_img_array = tf.expand_dims(test_img_array, axis=0)  # shape: (1, 28, 28)
+
+    predictions = model.predict(test_img_array)
     data['predictions'] = predictions
     data['predict_value'] = category_russian.get(np.argmax(predictions))
     plot_image(0, predictions, test_labels, input_arr)
